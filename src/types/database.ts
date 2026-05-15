@@ -65,6 +65,7 @@ export type ProcessoCadastro = {
   pdf_gerado_at: string | null
   codigo_interno_produto: string | null
   pdf_url: string | null
+  observacao_cadastro: string | null
   created_at: string
   updated_at: string
   created_by: string | null

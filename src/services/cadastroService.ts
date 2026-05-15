@@ -428,7 +428,7 @@ export const cadastroService = {
       }
 
       // Gerar URL assinada para download
-      const { data: urlData } = supabase.storage
+      const { data: urlData } = await supabase.storage
         .from('pdfs')
         .createSignedUrl(processo.pdf_url.replace('pdfs/', ''), 60)
 

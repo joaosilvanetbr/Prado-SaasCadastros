@@ -211,7 +211,7 @@ export default function CadastroDetalhePage() {
               </div>
               <div>
                 <p className="text-sm text-gray-500">Gramagem</p>
-                <p className="font-medium">{dadosFornecedor?.gramatura || '-'}</p>
+                <p className="font-medium">{dadosFornecedor?.gramagem || '-'}</p>
               </div>
               <div>
                 <p className="text-sm text-gray-500">Usa Balança</p>

@@ -2,9 +2,9 @@ export interface DadosCompradorProduto {
   id: string
   processo_id: string
   descricao_prado: string | null
-  entrega_cd: boolean
-  entrega_loja: boolean
-  cross_dock: boolean
+  entrega_cd: boolean | null | undefined
+  entrega_loja: boolean | null | undefined
+  cross_dock: boolean | null | undefined
   substituicao: boolean | null
   departamento: string | null
   categoria: string | null

@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { compradorProdutoSchema, type CompradorProdutoFormData } from '@/validations/compradorProdutoSchema'
+import type { DadosCompradorFormData } from '@/types/comprador'
 import { dadosCompradorService } from '@/services/dadosCompradorService'
 import { processosService } from '@/services/processosService'
 import { dadosFornecedorService } from '@/services/dadosFornecedorService'
@@ -119,7 +120,7 @@ export default function CompradorForm() {
     
     setIsSaving(true)
     try {
-      const result = await dadosCompradorService.salvarRascunhoComprador(id, profile.id, data)
+      const result = await dadosCompradorService.salvarRascunhoComprador(id, profile.id, data as unknown as DadosCompradorFormData)
       if (result.success) {
         alert('Rascunho salvo com sucesso!')
       } else {
@@ -144,7 +145,7 @@ export default function CompradorForm() {
     
     setIsSaving(true)
     try {
-      const result = await dadosCompradorService.enviarParaAprovacao(id, profile.id, data)
+      const result = await dadosCompradorService.enviarParaAprovacao(id, profile.id, data as unknown as DadosCompradorFormData)
       if (result.success) {
         alert('Processo enviado para aprovação!')
         navigate('/app/processos')

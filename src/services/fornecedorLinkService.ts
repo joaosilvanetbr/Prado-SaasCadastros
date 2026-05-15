@@ -5,7 +5,7 @@ import { processosService } from './processosService'
 
 export const fornecedorLinkService = {
   async gerarLinkFornecedor(processoId: string, usuarioId: string, emailDestino?: string) {
-    const { token, hash } = generateLinkToken()
+    const { token, hash } = await generateLinkToken()
 
     await supabase
       .from('links_fornecedor')
@@ -13,7 +13,7 @@ export const fornecedorLinkService = {
       .eq('processo_id', processoId)
       .eq('ativo', true)
 
-    const { data: link, error } = await supabase
+    const { data: newLink, error } = await supabase
       .from('links_fornecedor')
       .insert({
         processo_id: processoId,
@@ -34,12 +34,12 @@ export const fornecedorLinkService = {
       usuarioId
     )
 
-    return { link: data as FornecedorLink, token }
+    return { link: newLink as FornecedorLink, token }
   },
 
   async validarTokenFornecedor(token: string): Promise<FornecedorTokenValidationResult> {
     try {
-      const tokenHash = hashToken(token)
+      const tokenHash = await hashToken(token)
 
       const { data: link, error } = await supabase
         .from('links_fornecedor')

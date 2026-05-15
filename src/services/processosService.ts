@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase'
+import { NovoProcessoFormData } from '@/validations/processoSchema'
 import { ProcessoCadastro, ProcessoStatus, ProcessoWithRelations, HistoricoProcesso } from '@/types/database'
 
 interface CreateProcessoData {
@@ -64,7 +65,7 @@ export const processosService = {
     return data as unknown as ProcessoWithRelations
   },
 
-  async criarProcesso(data: CreateProcessoData, compradorId: string) {
+  async criarProcesso(data: NovoProcessoFormData, compradorId: string) {
     let fornecedorId = data.fornecedor_id
 
     if (!fornecedorId && data.fornecedor_razao_social) {

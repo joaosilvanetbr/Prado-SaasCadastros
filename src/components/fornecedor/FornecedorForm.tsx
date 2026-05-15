@@ -1,18 +1,19 @@
 import { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { fornecedorProdutoSchema, FornecedorProdutoFormData } from '@/validations/fornecedorProdutoSchema'
 import { fornecedorLinkService } from '@/services/fornecedorLinkService'
 import { dadosFornecedorService } from '@/services/dadosFornecedorService'
-import { formatCNPJ, formatCurrency, calculateCubagem } from '@/lib/formatters'
+import { processosService } from '@/services/processosService'
+import { FornecedorTokenValidationResult } from '@/types/fornecedor'
+import { calculateCubagem } from '@/lib/formatters'
 import FornecedorLayout from './FornecedorLayout'
-import { AlertCircle, CheckCircle, Send, Save } from 'lucide-react'
+import { AlertCircle, CheckCircle, Send } from 'lucide-react'
 
 export default function FornecedorForm() {
   const { token } = useParams<{ token: string }>()
-  const navigate = useNavigate()
-  const [validationResult, setValidationResult] = useState<{ valid: boolean; reason?: string } | null>(null)
+  const [validationResult, setValidationResult] = useState<FornecedorTokenValidationResult | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
@@ -57,20 +58,20 @@ export default function FornecedorForm() {
   }, [altura, largura, comprimento, setValue])
 
   const onSubmit = async (data: FornecedorProdutoFormData) => {
-    if (!validationResult?.valid || !validationResult.linkId) return
+    if (!validationResult?.valid || !validationResult.linkId || !validationResult.processoId) return
 
     setIsSubmitting(true)
     setError('')
 
     try {
       await dadosFornecedorService.enviarDadosFornecedor(
-        validationResult.processoId!,
+        validationResult.processoId,
         data,
         validationResult.linkId
       )
 
-      await processosService?.alterarStatusProcesso?.(
-        validationResult.processoId!,
+      await processosService.alterarStatusProcesso(
+        validationResult.processoId,
         'enviado_pelo_fornecedor',
         'Fornecedor enviou dados do produto',
         'fornecedor'
